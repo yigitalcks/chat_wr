@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HTMX Chat Application</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://unpkg.com/htmx.org@1.9.2"></script>
+</head>
+<body>
+    <div class="chat-container">
+        <div class="chat-window">
+            <div id="messages" class="messages" 
+                 hx-get="http://app:8080/api/messages" 
+                 hx-trigger="load" 
+                 hx-swap="innerHTML">
+                <!-- Messages will load here -->
+            </div>
+            <div class="message-input">
+                <form hx-post="http://app:8080/api/send-message" 
+                      hx-trigger="submit" 
+                      hx-swap="beforeend" 
+                      hx-target="#messages">
+                    <input type="text" id="message-input" name="message" placeholder="Type a message">
+                    <button type="submit">Send</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
