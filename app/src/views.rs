@@ -66,7 +66,7 @@ pub async fn send_message(
 
 pub async fn create_table(State(conn): State<Conn>) {
     let conn = conn.lock().unwrap();
-    conn.execute(
+    let _ = conn.execute(
         "CREATE TABLE Message (
             sender TEXT NOT NULL,
             receiver TEXT NOT NULL,
