@@ -11,13 +11,13 @@
     <div class="chat-container">
         <div class="chat-window">
             <div id="messages" class="messages" 
-                 hx-get="http://app:8080/api/messages" 
+                 hx-get="http://localhost:8080/api/messages" 
                  hx-trigger="load" 
                  hx-swap="innerHTML">
                 <!-- Messages will load here -->
             </div>
             <div class="message-input">
-                <form hx-post="http://app:8080/api/send-message" 
+                <form hx-post="http://localhost:8080/api/send-message" 
                       hx-trigger="submit" 
                       hx-swap="beforeend" 
                       hx-target="#messages">
