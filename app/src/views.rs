@@ -1,4 +1,5 @@
 use std::{sync::{Arc, Mutex}, time::SystemTime};
+use serde::Deserialize;
 use axum::{
     body::{Body, Bytes}, 
     extract::{Extension, Json, Path, Query, Request, State, Form}, 
@@ -11,12 +12,17 @@ use std::time::{UNIX_EPOCH, Duration};
 
 type Conn = Arc<Mutex<Connection>>;
 
+#[derive(Deserialize)]
+pub struct Comingmsg {
+    message: String,
+}
+
 struct Message {
     sender: String,
     reciever: String,
     send_dateandtime: SystemTime,
     message: String,
-};
+}
 
 pub async fn get_messages(State(conn): State<Conn>) -> Result<Html<String>, StatusCode> {
     let conn = conn.lock().map_err(|_| StatusCode::INTERNAL_SERVER_ERROR)?;
@@ -46,13 +52,13 @@ pub async fn get_messages(State(conn): State<Conn>) -> Result<Html<String>, Stat
 
 pub async fn send_message(
     State(conn): State<Conn>,
-    Form(input): Form<String>
+    Form(input): Form<Comingmsg>
 ) -> Result<StatusCode, StatusCode> {
     let mut conn = conn.lock().map_err(|_| StatusCode::INTERNAL_SERVER_ERROR)?;
     
     conn.execute(
         "INSERT INTO Message (sender, receiver, send_dateandtime, message) VALUES (?, ?, strftime('%s'), ?)",
-        ["You", "Server", &input]
+        ["You", "Server", &input.message]
     ).map_err(|_| StatusCode::INTERNAL_SERVER_ERROR)?;
 
     Ok(StatusCode::ACCEPTED)

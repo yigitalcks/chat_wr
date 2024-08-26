@@ -24,7 +24,7 @@ use views::*;
 
 #[tokio::main]
 async fn main() {
-    let conn = Connection::open("../db/chat.db").expect("Database couldn't open");
+    let conn = Connection::open("db/chat.db").expect("Database couldn't open");
     let shared_conn = Arc::new(Mutex::new(conn));
 
     let cors = CorsLayer::permissive();
